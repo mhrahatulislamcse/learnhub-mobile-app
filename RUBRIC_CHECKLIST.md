@@ -27,7 +27,7 @@
 | **Task 23** | Settings menu items screenshot | 5 pts | Pending | `evidence/evidence-menu-items.jpg` |
 | **Task 24** | Settings screen source code | 4 pts | **Completed** | [`lib/features/settings/screens/settings_screen.dart`](file:///F:/LearnHub/lib/features/settings/screens/settings_screen.dart) |
 | **Task 25** | Settings screen screenshot | 2 pts | Pending | `evidence/evidence-settings-screen.png` |
-| **Task 26** | Notification implementation source code | 4 pts | In Progress | `lib/features/notifications/services/notification_service.dart` |
+| **Task 26** | Notification implementation source code | 4 pts | **Completed** | [`lib/features/notifications/services/notification_service.dart`](file:///F:/LearnHub/lib/features/notifications/services/notification_service.dart) & [`lib/features/notifications/screens/notification_screen.dart`](file:///F:/LearnHub/lib/features/notifications/screens/notification_screen.dart) |
 | **Task 27** | Notification configuration screenshot | 2 pts | Pending | `evidence/evidence-notification-configure.png` |
 | **Task 28** | Successful notification alert screenshot | 4 pts | Pending | `evidence/evidence-notification-alert.png` |
 | **TOTAL** | **Comprehensive Full Application Delivery** | **100 pts** | | |

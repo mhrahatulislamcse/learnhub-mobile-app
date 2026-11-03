@@ -4,6 +4,7 @@ import '../core/constants/app_constants.dart';
 import '../features/auth/providers/auth_provider.dart';
 import '../features/books/providers/books_provider.dart';
 import '../features/favorites/providers/favorites_provider.dart';
+import '../features/notifications/providers/notification_provider.dart';
 import '../features/settings/providers/settings_provider.dart';
 import 'routes.dart';
 import 'theme.dart';
@@ -27,6 +28,9 @@ class LearnHubAppRoot extends StatelessWidget {
         ),
         ChangeNotifierProvider<SettingsProvider>(
           create: (_) => SettingsProvider(),
+        ),
+        ChangeNotifierProvider<NotificationProvider>(
+          create: (_) => NotificationProvider(),
         ),
       ],
       child: Consumer<SettingsProvider>(
