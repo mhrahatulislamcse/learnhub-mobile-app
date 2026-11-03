@@ -64,6 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          // API Explorer Shortcut (Task 19/20)
+          IconButton(
+            icon: const Icon(Icons.api_rounded),
+            tooltip: 'Open Library API',
+            onPressed: () => context.push('/api-integration'),
+          ),
           // Favorites Shortcut
           IconButton(
             icon: const Icon(Icons.bookmark_outline_rounded),

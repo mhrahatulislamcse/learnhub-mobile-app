@@ -31,4 +31,7 @@ class AppRoutes {
 
   static const String notifications = '/notifications';
   static const String notificationsName = 'notifications';
+
+  static const String apiIntegration = '/api-integration';
+  static const String apiIntegrationName = 'api-integration';
 }

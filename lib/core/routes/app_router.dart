@@ -4,6 +4,7 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/profile_page.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
+import '../../features/books/screens/api_integration_screen.dart';
 import '../../features/details/screens/book_detail_screen.dart';
 import '../../features/favorites/screens/favorites_screen.dart';
 import '../../features/home/screens/home_screen.dart';
@@ -58,6 +59,11 @@ class AppRouter {
         path: AppRoutes.favorites,
         name: AppRoutes.favoritesName,
         builder: (context, state) => const FavoritesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.apiIntegration,
+        name: AppRoutes.apiIntegrationName,
+        builder: (context, state) => const ApiIntegrationScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

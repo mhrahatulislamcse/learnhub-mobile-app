@@ -20,7 +20,7 @@
 | **Task 16** | Local storage source code | 4 pts | **Completed** | [`lib/services/storage_service.dart`](file:///F:/LearnHub/lib/services/storage_service.dart) |
 | **Task 17** | Local storage evidence | 2 pts | Pending | `evidence/evidence-persistence.png` |
 | **Task 18** | Frontend and local storage evidence | 2 pts | Pending | `evidence/evidence-integrateScreen-persistence.png` |
-| **Task 19** | API integration source code | 4 pts | In Progress | `lib/services/api_service.dart` |
+| **Task 19** | API integration source code | 4 pts | **Completed** | [`lib/services/api_service.dart`](file:///F:/LearnHub/lib/services/api_service.dart) & [`lib/features/books/screens/api_integration_screen.dart`](file:///F:/LearnHub/lib/features/books/screens/api_integration_screen.dart) |
 | **Task 20** | API integration screenshot | 2 pts | Pending | `evidence/evidence-api-ux.png` |
 | **Task 21** | Settings menu source code | 4 pts | In Progress | `lib/features/settings/widgets/settings_drawer.dart` |
 | **Task 22** | Settings menu icon screenshot | 2 pts | Pending | `evidence/evidence-menu-icon.jpg` |

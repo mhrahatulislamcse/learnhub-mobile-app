@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../core/widgets/app_error_widget.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
+import '../features/books/screens/api_integration_screen.dart';
 import '../features/details/screens/book_detail_screen.dart';
 import '../features/favorites/screens/favorites_screen.dart';
 import '../features/home/screens/home_screen.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String settings = '/settings';
   static const String notifications = '/notifications';
+  static const String apiIntegration = '/api-integration';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -49,6 +51,10 @@ class AppRoutes {
       GoRoute(
         path: favorites,
         builder: (context, state) => const FavoritesScreen(),
+      ),
+      GoRoute(
+        path: apiIntegration,
+        builder: (context, state) => const ApiIntegrationScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
