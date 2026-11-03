@@ -154,3 +154,4 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
