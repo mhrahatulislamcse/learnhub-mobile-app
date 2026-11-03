@@ -1,41 +1,37 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
-import 'core/utils/app_logger.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'firebase_options.dart';
+import 'features/auth/providers/auth_provider.dart';
 import 'injection_container.dart' as di;
+import 'services/firebase_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase Core
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    AppLogger.info('Firebase Core initialized successfully');
-  } catch (e) {
-    AppLogger.warning('Firebase initialization notice: $e');
-  }
+  // Initialize Firebase Core services
+  await FirebaseService.initialize();
 
-  // Initialize Dependency Injection
+  // Initialize Clean Architecture dependency injection
   await di.initDependencyInjection();
 
-  runApp(const LearnHubApp());
+  runApp(const LearnHubMain());
 }
 
-class LearnHubApp extends StatelessWidget {
-  const LearnHubApp({super.key});
+class LearnHubMain extends StatelessWidget {
+  const LearnHubMain({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (_) => AuthProvider(),
+        ),
         BlocProvider<AuthBloc>(
           create: (_) => di.sl<AuthBloc>(),
         ),
