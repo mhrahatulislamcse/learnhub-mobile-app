@@ -109,3 +109,4 @@ class SettingsProvider extends ChangeNotifier {
     }
   }
 }
+
