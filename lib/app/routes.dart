@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 import '../core/widgets/app_error_widget.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
-import '../features/home/presentation/pages/home_page.dart';
+import '../features/details/screens/book_detail_screen.dart';
+import '../features/home/screens/home_screen.dart';
 import '../features/splash/presentation/pages/splash_page.dart';
 
 /// Central application routes definition using GoRouter
@@ -38,7 +39,11 @@ class AppRoutes {
       ),
       GoRoute(
         path: home,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: bookDetails,
+        builder: (context, state) => const BookDetailScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -50,4 +55,3 @@ class AppRoutes {
     ),
   );
 }
-

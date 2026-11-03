@@ -7,6 +7,7 @@ import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/books/providers/books_provider.dart';
 import 'injection_container.dart' as di;
 import 'services/firebase_service.dart';
 
@@ -31,6 +32,9 @@ class LearnHubMain extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthProvider>(
           create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider<BooksProvider>(
+          create: (_) => BooksProvider(),
         ),
         BlocProvider<AuthBloc>(
           create: (_) => di.sl<AuthBloc>(),

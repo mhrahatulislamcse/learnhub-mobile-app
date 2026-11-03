@@ -20,6 +20,15 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String profileName = 'profile';
 
-  static const String courseDetails = '/course/:id';
-  static const String courseDetailsName = 'course-details';
+  static const String bookDetails = '/book-details';
+  static const String bookDetailsName = 'book-details';
+
+  static const String favorites = '/favorites';
+  static const String favoritesName = 'favorites';
+
+  static const String settings = '/settings';
+  static const String settingsName = 'settings';
+
+  static const String notifications = '/notifications';
+  static const String notificationsName = 'notifications';
 }
