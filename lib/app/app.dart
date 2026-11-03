@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../core/constants/app_constants.dart';
 import '../features/auth/providers/auth_provider.dart';
 import '../features/books/providers/books_provider.dart';
+import '../features/favorites/providers/favorites_provider.dart';
 import 'routes.dart';
 import 'theme.dart';
 
@@ -19,6 +20,9 @@ class LearnHubAppRoot extends StatelessWidget {
         ),
         ChangeNotifierProvider<BooksProvider>(
           create: (_) => BooksProvider(),
+        ),
+        ChangeNotifierProvider<FavoritesProvider>(
+          create: (_) => FavoritesProvider(),
         ),
       ],
       child: MaterialApp.router(

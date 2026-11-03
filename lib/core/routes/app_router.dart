@@ -5,6 +5,7 @@ import '../../features/auth/presentation/pages/profile_page.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/details/screens/book_detail_screen.dart';
+import '../../features/favorites/screens/favorites_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../widgets/app_error_widget.dart';
@@ -52,6 +53,11 @@ class AppRouter {
         path: AppRoutes.bookDetails,
         name: AppRoutes.bookDetailsName,
         builder: (context, state) => const BookDetailScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.favorites,
+        name: AppRoutes.favoritesName,
+        builder: (context, state) => const FavoritesScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

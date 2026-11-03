@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../models/book_model.dart';
+import '../../favorites/providers/favorites_provider.dart';
 
-/// Reusable Book Card displaying cover art, title, author, and year
+/// Reusable Book Card displaying cover art, title, author, year, and favorite state
 class BookCard extends StatelessWidget {
   final BookModel book;
   final VoidCallback onTap;
@@ -18,6 +20,8 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final favoritesProvider = context.watch<FavoritesProvider>();
+    final isFav = favoritesProvider.isFavorite(book.id);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -135,10 +139,19 @@ class BookCard extends StatelessWidget {
                 ),
               ),
 
-              // Optional Trailing Widget (e.g. Favorite Icon)
+              // Trailing action or favorite indicator
               if (trailing != null) ...[
                 const SizedBox(width: 8),
                 trailing!,
+              ] else if (isFav) ...[
+                const Padding(
+                  padding: EdgeInsets.all(4.0),
+                  child: Icon(
+                    Icons.bookmark_added_rounded,
+                    color: AppColors.accent,
+                    size: 22,
+                  ),
+                ),
               ] else ...[
                 const Icon(
                   Icons.arrow_forward_ios_rounded,

@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:learnhub/core/widgets/custom_button.dart';
+import 'package:learnhub/features/auth/providers/auth_provider.dart';
+import 'package:learnhub/features/auth/services/auth_service.dart';
 import 'package:learnhub/features/books/providers/books_provider.dart';
 import 'package:learnhub/features/details/screens/book_detail_screen.dart';
+import 'package:learnhub/features/favorites/providers/favorites_provider.dart';
 import 'package:learnhub/models/book_model.dart';
 import 'package:learnhub/services/api_service.dart';
+import 'package:learnhub/services/firebase_service.dart';
+import 'package:learnhub/services/storage_service.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 class MockApiService extends Mock implements ApiService {}
+class MockAuthService extends Mock implements AuthService {}
+class MockStorageService extends Mock implements StorageService {}
+class MockFirebaseService extends Mock implements FirebaseService {}
 
 void main() {
   late MockApiService mockApiService;
+  late MockAuthService mockAuthService;
+  late MockStorageService mockStorageService;
+  late MockFirebaseService mockFirebaseService;
+
   late BooksProvider booksProvider;
+  late AuthProvider authProvider;
+  late FavoritesProvider favoritesProvider;
 
   const testBook = BookModel(
     id: 'OL999W',
@@ -25,18 +39,46 @@ void main() {
     description: 'Captures a wealth of experience about the design of object-oriented software.',
   );
 
+  setUpAll(() {
+    registerFallbackValue(testBook);
+  });
+
   setUp(() {
     mockApiService = MockApiService();
+    mockAuthService = MockAuthService();
+    mockStorageService = MockStorageService();
+    mockFirebaseService = MockFirebaseService();
+
     when(() => mockApiService.getFeaturedBooks(limit: any(named: 'limit')))
         .thenAnswer((_) async => [testBook]);
+    when(() => mockAuthService.authStateChanges)
+        .thenAnswer((_) => Stream.value(null));
+    when(() => mockAuthService.currentFirebaseUser).thenReturn(null);
+
+    when(() => mockStorageService.getFavoriteBooks())
+        .thenAnswer((_) async => []);
+    when(() => mockStorageService.saveFavoriteBook(any()))
+        .thenAnswer((_) async => true);
+    when(() => mockStorageService.removeFavoriteBook(any()))
+        .thenAnswer((_) async => true);
 
     booksProvider = BooksProvider(apiService: mockApiService);
     booksProvider.selectBook(testBook);
+
+    authProvider = AuthProvider(authService: mockAuthService);
+    favoritesProvider = FavoritesProvider(
+      storageService: mockStorageService,
+      firebaseService: mockFirebaseService,
+    );
   });
 
   Widget buildTestApp({BookModel? book}) {
-    return ChangeNotifierProvider<BooksProvider>.value(
-      value: booksProvider,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<BooksProvider>.value(value: booksProvider),
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ChangeNotifierProvider<FavoritesProvider>.value(value: favoritesProvider),
+      ],
       child: MaterialApp(
         home: BookDetailScreen(book: book),
       ),
@@ -76,17 +118,19 @@ void main() {
 
     testWidgets('displays empty state when no book is provided or selected', (WidgetTester tester) async {
       booksProvider.selectBook(const BookModel(id: '', title: '', authors: []));
-      // Force null by passing empty/null
       await tester.pumpWidget(
-        ChangeNotifierProvider<BooksProvider>.value(
-          value: booksProvider..clearSearch(),
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<BooksProvider>.value(value: booksProvider..clearSearch()),
+            ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+            ChangeNotifierProvider<FavoritesProvider>.value(value: favoritesProvider),
+          ],
           child: const MaterialApp(
             home: BookDetailScreen(book: null),
           ),
         ),
       );
 
-      // If activeBook title is empty, it will handle it gracefully or if null
       expect(find.byType(Scaffold), findsOneWidget);
     });
   });

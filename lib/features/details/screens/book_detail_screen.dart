@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../models/book_model.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../books/providers/books_provider.dart';
+import '../../favorites/providers/favorites_provider.dart';
 
 /// Task 13: Book Detail Screen Source Code (4 points)
 class BookDetailScreen extends StatelessWidget {
@@ -15,8 +17,9 @@ class BookDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Use passed book or active selection in BooksProvider
     final activeBook = book ?? context.watch<BooksProvider>().selectedBook;
+    final favoritesProvider = context.watch<FavoritesProvider>();
+    final authProvider = context.watch<AuthProvider>();
 
     if (activeBook == null) {
       return Scaffold(
@@ -39,6 +42,8 @@ class BookDetailScreen extends StatelessWidget {
       );
     }
 
+    final isFav = favoritesProvider.isFavorite(activeBook.id);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -47,6 +52,31 @@ class BookDetailScreen extends StatelessWidget {
         ),
         title: const Text('Book Details'),
         actions: [
+          // Quick Favorite Icon Action in AppBar
+          IconButton(
+            icon: Icon(
+              isFav ? Icons.bookmark_added_rounded : Icons.bookmark_add_outlined,
+              color: isFav ? AppColors.accent : null,
+            ),
+            tooltip: isFav ? 'Remove Favorite' : 'Save Favorite',
+            onPressed: () async {
+              final added = await favoritesProvider.toggleFavorite(
+                activeBook,
+                userId: authProvider.currentUser?.uid,
+              );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(added
+                        ? 'Saved "${activeBook.title}" to Favorites'
+                        : 'Removed "${activeBook.title}" from Favorites'),
+                    backgroundColor: added ? AppColors.success : AppColors.error,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.share_outlined),
             tooltip: 'Share Book',
@@ -209,7 +239,7 @@ class BookDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     activeBook.description ??
-                        'This academic book is indexed in the Open Library catalog. It provides foundational educational insights into ${activeBook.title}. Use this resource for academic study, research, and skill advancement.',
+                        'This academic resource is cataloged in the Open Library global database. It provides comprehensive study materials for ${activeBook.title}. Recommended for university coursework, technical reading, and skill enhancement.',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       height: 1.6,
                       color: AppColors.lightTextSecondary,
@@ -217,20 +247,31 @@ class BookDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
 
-                  // Action Buttons
+                  // Action Buttons (Integrated with FavoritesProvider)
                   Row(
                     children: [
                       Expanded(
                         child: CustomButton(
-                          text: 'Bookmark Favorite',
-                          icon: const Icon(Icons.bookmark_add_outlined, color: Colors.white),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Saved "${activeBook.title}" to Favorites!'),
-                                backgroundColor: AppColors.success,
-                              ),
+                          text: isFav ? 'Saved in Favorites' : 'Bookmark Favorite',
+                          icon: Icon(
+                            isFav ? Icons.bookmark_added_rounded : Icons.bookmark_add_outlined,
+                            color: Colors.white,
+                          ),
+                          onPressed: () async {
+                            final added = await favoritesProvider.toggleFavorite(
+                              activeBook,
+                              userId: authProvider.currentUser?.uid,
                             );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(added
+                                      ? 'Saved "${activeBook.title}" to Favorites!'
+                                      : 'Removed "${activeBook.title}" from Favorites'),
+                                  backgroundColor: added ? AppColors.success : AppColors.error,
+                                ),
+                              );
+                            }
                           },
                         ),
                       ),

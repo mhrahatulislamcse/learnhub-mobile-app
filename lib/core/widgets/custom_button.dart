@@ -42,20 +42,38 @@ class CustomButton extends StatelessWidget {
         children: [
           icon!,
           const SizedBox(width: 8),
-          Text(text),
+          Flexible(
+            child: Text(
+              text,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         ],
       );
     } else {
-      childWidget = Text(text);
+      childWidget = Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      );
     }
+
+    final buttonStyle = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    );
 
     final button = isOutlined
         ? OutlinedButton(
             onPressed: effectiveOnPressed,
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            ),
             child: childWidget,
           )
         : ElevatedButton(
             onPressed: effectiveOnPressed,
+            style: buttonStyle,
             child: childWidget,
           );
 
