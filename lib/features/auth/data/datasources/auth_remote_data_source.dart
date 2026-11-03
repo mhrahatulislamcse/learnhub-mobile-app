@@ -6,15 +6,29 @@ import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel?> getCurrentUser();
+
   Future<UserModel> signInWithEmail({
     required String email,
     required String password,
   });
+
   Future<UserModel> signUpWithEmail({
     required String email,
     required String password,
     required String displayName,
+    required String role,
   });
+
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  });
+
+  Future<UserModel> updateUserProfile({
+    required String displayName,
+    String? photoUrl,
+    String? role,
+  });
+
   Future<void> signOut();
 }
 
@@ -83,6 +97,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
     required String displayName,
+    required String role,
   }) async {
     try {
       final credential = await firebaseAuth.createUserWithEmailAndPassword(
@@ -101,7 +116,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: email,
         displayName: displayName,
         photoUrl: user.photoURL,
-        role: 'student',
+        role: role,
         createdAt: DateTime.now(),
       );
 
@@ -119,6 +134,73 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+    } on fb.FirebaseAuthException catch (e) {
+      throw AuthException(code: e.code, message: e.message ?? 'Password reset error');
+    } catch (e) {
+      throw ServerException(message: 'Password reset error: $e');
+    }
+  }
+
+  @override
+  Future<UserModel> updateUserProfile({
+    required String displayName,
+    String? photoUrl,
+    String? role,
+  }) async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw const AuthException(message: 'No authenticated user to update');
+      }
+
+      await user.updateDisplayName(displayName);
+      if (photoUrl != null && photoUrl.isNotEmpty) {
+        await user.updatePhotoURL(photoUrl);
+      }
+
+      final updateData = <String, dynamic>{
+        'displayName': displayName,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+      if (photoUrl != null && photoUrl.isNotEmpty) {
+        updateData['photoUrl'] = photoUrl;
+      }
+      if (role != null && role.isNotEmpty) {
+        updateData['role'] = role;
+      }
+
+      await firestore
+          .collection(AppConstants.usersCollection)
+          .doc(user.uid)
+          .update(updateData);
+
+      final updatedDoc = await firestore
+          .collection(AppConstants.usersCollection)
+          .doc(user.uid)
+          .get();
+
+      if (updatedDoc.exists && updatedDoc.data() != null) {
+        return UserModel.fromJson({...updatedDoc.data()!, 'id': updatedDoc.id});
+      }
+
+      return UserModel(
+        id: user.uid,
+        email: user.email ?? '',
+        displayName: displayName,
+        photoUrl: photoUrl ?? user.photoURL,
+        role: role ?? 'student',
+      );
+    } on fb.FirebaseAuthException catch (e) {
+      throw AuthException(code: e.code, message: e.message ?? 'Profile update error');
+    } catch (e) {
+      throw ServerException(message: 'Profile update error: $e');
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       await firebaseAuth.signOut();
@@ -127,4 +209,3 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 }
-

@@ -14,7 +14,12 @@ class AppRoutes {
   static const String register = '/register';
   static const String registerName = 'register';
 
+  static const String forgotPassword = '/forgot-password';
+  static const String forgotPasswordName = 'forgot-password';
+
+  static const String profile = '/profile';
+  static const String profileName = 'profile';
+
   static const String courseDetails = '/course/:id';
   static const String courseDetailsName = 'course-details';
 }
-

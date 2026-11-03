@@ -7,7 +7,11 @@ import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'features/auth/domain/usecases/send_password_reset_usecase.dart';
+import 'features/auth/domain/usecases/sign_in_usecase.dart';
+import 'features/auth/domain/usecases/sign_up_usecase.dart';
 import 'features/auth/domain/usecases/sign_out_usecase.dart';
+import 'features/auth/domain/usecases/update_profile_usecase.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 
 final sl = GetIt.instance;
@@ -18,12 +22,20 @@ Future<void> initDependencyInjection() async {
   sl.registerFactory(
     () => AuthBloc(
       getCurrentUserUseCase: sl(),
+      signInUseCase: sl(),
+      signUpUseCase: sl(),
+      sendPasswordResetUseCase: sl(),
+      updateProfileUseCase: sl(),
       signOutUseCase: sl(),
     ),
   );
 
   // UseCases
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
+  sl.registerLazySingleton(() => SignInUseCase(sl()));
+  sl.registerLazySingleton(() => SignUpUseCase(sl()));
+  sl.registerLazySingleton(() => SendPasswordResetUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
 
   // Repository
@@ -45,4 +57,3 @@ Future<void> initDependencyInjection() async {
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 }
-

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
@@ -24,11 +26,34 @@ class HomePage extends StatelessWidget {
           ],
         ),
         actions: [
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is Authenticated) {
+                return IconButton(
+                  icon: CircleAvatar(
+                    radius: 14,
+                    backgroundColor: AppColors.primary,
+                    child: Text(
+                      state.user.displayName.isNotEmpty ? state.user.displayName[0].toUpperCase() : 'U',
+                      style: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  tooltip: 'View Profile',
+                  onPressed: () => context.pushNamed(AppRoutes.profileName),
+                );
+              }
+              return IconButton(
+                icon: const Icon(Icons.account_circle_outlined),
+                tooltip: 'Sign In',
+                onPressed: () => context.pushNamed(AppRoutes.loginName),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.notifications_none_rounded),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Notifications will arrive in Phase 2')),
+                const SnackBar(content: Text('Notifications will arrive in Phase 3')),
               );
             },
           ),
@@ -68,7 +93,7 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text(
-                      'Phase 1 • Foundation Ready',
+                      'Phase 2 • Authentication & User Management Active',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -77,17 +102,22 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Welcome to LearnHub',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      final name = state is Authenticated ? state.user.displayName : 'Learner';
+                      return Text(
+                        'Welcome, $name!',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Clean Architecture Foundation, Firebase Core, and Design System successfully initialized.',
+                    'Full Authentication with email/password, roles, and profile management enabled.',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 14,
@@ -100,7 +130,7 @@ class HomePage extends StatelessWidget {
 
             // Authentication Status Card
             Text(
-              'Authentication State',
+              'Authentication & Profile Status',
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
@@ -110,27 +140,65 @@ class HomePage extends StatelessWidget {
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Row(
+                      child: Column(
                         children: [
-                          const CircleAvatar(
-                            backgroundColor: AppColors.secondary,
-                            child: Icon(Icons.person, color: Colors.white),
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: state.user.role == 'instructor'
+                                    ? AppColors.secondary
+                                    : AppColors.primary,
+                                child: Text(
+                                  state.user.displayName.isNotEmpty
+                                      ? state.user.displayName[0].toUpperCase()
+                                      : 'U',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.user.displayName,
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    Text(
+                                      state.user.email,
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: state.user.role == 'instructor'
+                                      ? AppColors.secondary.withValues(alpha: 0.15)
+                                      : AppColors.primary.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  state.user.role.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: state.user.role == 'instructor'
+                                        ? AppColors.secondary
+                                        : AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.user.displayName,
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                                Text(
-                                  state.user.email,
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
+                          const SizedBox(height: 16),
+                          CustomButton(
+                            text: 'Manage Profile',
+                            isOutlined: true,
+                            height: 40,
+                            icon: const Icon(Icons.manage_accounts_outlined, size: 18),
+                            onPressed: () => context.pushNamed(AppRoutes.profileName),
                           ),
                         ],
                       ),
@@ -141,28 +209,54 @@ class HomePage extends StatelessWidget {
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.info.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.verified_user_outlined, color: AppColors.info),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Guest / Unauthenticated', style: theme.textTheme.titleMedium),
-                              Text(
-                                'AuthBloc is connected to GetIt & FirebaseAuth',
-                                style: theme.textTheme.bodyMedium,
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.info.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ],
-                          ),
+                              child: const Icon(Icons.person_outline, color: AppColors.info),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Not Signed In', style: theme.textTheme.titleMedium),
+                                  Text(
+                                    'Sign in or register to unlock courses and progress tracking',
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                text: 'Sign In',
+                                height: 42,
+                                onPressed: () => context.pushNamed(AppRoutes.loginName),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: CustomButton(
+                                text: 'Sign Up',
+                                isOutlined: true,
+                                height: 42,
+                                onPressed: () => context.pushNamed(AppRoutes.registerName),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -172,54 +266,39 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Clean Architecture Components
+            // Features Checklist
             Text(
-              'Architecture Verification',
+              'Phase 2 Authentication Features',
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
             _buildCheckItem(
               context,
-              title: 'Domain Layer',
-              subtitle: 'Entities, UseCases (Either<Failure, T>), Repository Interfaces',
-              icon: Icons.layers_outlined,
+              title: 'Email & Password Auth',
+              subtitle: 'Firebase Authentication integration with form validation',
+              icon: Icons.password_rounded,
               isCompleted: true,
             ),
             _buildCheckItem(
               context,
-              title: 'Data Layer',
-              subtitle: 'Models (fromJson/toJson), Remote Data Sources, Repo Impl',
-              icon: Icons.storage_outlined,
+              title: 'Role-Based Profiles',
+              subtitle: 'Student and Instructor roles stored in Cloud Firestore',
+              icon: Icons.assignment_ind_outlined,
               isCompleted: true,
             ),
             _buildCheckItem(
               context,
-              title: 'Presentation Layer',
-              subtitle: 'BLoC State Management, Material 3 Theme, GoRouter',
-              icon: Icons.devices_rounded,
+              title: 'Password Recovery',
+              subtitle: 'Send password reset emails via Firebase Auth',
+              icon: Icons.lock_reset_rounded,
               isCompleted: true,
             ),
             _buildCheckItem(
               context,
-              title: 'Dependency Injection',
-              subtitle: 'GetIt service locator registering core & feature modules',
-              icon: Icons.account_tree_outlined,
+              title: 'Profile Management',
+              subtitle: 'View user credentials, update display name and role',
+              icon: Icons.badge_outlined,
               isCompleted: true,
-            ),
-            const SizedBox(height: 24),
-
-            // Action Button
-            CustomButton(
-              text: 'Test Component Interaction',
-              icon: const Icon(Icons.bolt_rounded, color: Colors.white),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Interaction test passed! Clean Architecture is operational.'),
-                    backgroundColor: AppColors.success,
-                  ),
-                );
-              },
             ),
           ],
         ),
@@ -261,4 +340,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
