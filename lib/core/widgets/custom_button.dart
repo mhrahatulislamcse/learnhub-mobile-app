@@ -9,6 +9,8 @@ class CustomButton extends StatelessWidget {
   final Widget? icon;
   final double? width;
   final double height;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const CustomButton({
     super.key,
@@ -19,6 +21,8 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.width = double.infinity,
     this.height = 50.0,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
@@ -60,6 +64,8 @@ class CustomButton extends StatelessWidget {
     }
 
     final buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      foregroundColor: textColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
     );
 

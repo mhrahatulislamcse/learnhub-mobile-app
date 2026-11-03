@@ -6,6 +6,7 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/books/screens/api_integration_screen.dart';
 import '../../features/details/screens/book_detail_screen.dart';
+import '../../features/settings/screens/settings_screen.dart';
 import '../../features/favorites/screens/favorites_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -64,6 +65,11 @@ class AppRouter {
         path: AppRoutes.apiIntegration,
         name: AppRoutes.apiIntegrationName,
         builder: (context, state) => const ApiIntegrationScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        name: AppRoutes.settingsName,
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

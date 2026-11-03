@@ -7,6 +7,8 @@ import '../features/books/screens/api_integration_screen.dart';
 import '../features/details/screens/book_detail_screen.dart';
 import '../features/favorites/screens/favorites_screen.dart';
 import '../features/home/screens/home_screen.dart';
+import '../features/profile/screens/profile_screen.dart';
+import '../features/settings/screens/settings_screen.dart';
 import '../features/splash/presentation/pages/splash_page.dart';
 
 /// Central application routes definition using GoRouter
@@ -55,6 +57,14 @@ class AppRoutes {
       GoRoute(
         path: apiIntegration,
         builder: (context, state) => const ApiIntegrationScreen(),
+      ),
+      GoRoute(
+        path: profile,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: settings,
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

@@ -22,10 +22,10 @@
 | **Task 18** | Frontend and local storage evidence | 2 pts | Pending | `evidence/evidence-integrateScreen-persistence.png` |
 | **Task 19** | API integration source code | 4 pts | **Completed** | [`lib/services/api_service.dart`](file:///F:/LearnHub/lib/services/api_service.dart) & [`lib/features/books/screens/api_integration_screen.dart`](file:///F:/LearnHub/lib/features/books/screens/api_integration_screen.dart) |
 | **Task 20** | API integration screenshot | 2 pts | Pending | `evidence/evidence-api-ux.png` |
-| **Task 21** | Settings menu source code | 4 pts | In Progress | `lib/features/settings/widgets/settings_drawer.dart` |
+| **Task 21** | Settings menu source code | 4 pts | **Completed** | [`lib/features/settings/widgets/settings_drawer.dart`](file:///F:/LearnHub/lib/features/settings/widgets/settings_drawer.dart) |
 | **Task 22** | Settings menu icon screenshot | 2 pts | Pending | `evidence/evidence-menu-icon.jpg` |
 | **Task 23** | Settings menu items screenshot | 5 pts | Pending | `evidence/evidence-menu-items.jpg` |
-| **Task 24** | Settings screen source code | 4 pts | In Progress | `lib/features/settings/screens/settings_screen.dart` |
+| **Task 24** | Settings screen source code | 4 pts | **Completed** | [`lib/features/settings/screens/settings_screen.dart`](file:///F:/LearnHub/lib/features/settings/screens/settings_screen.dart) |
 | **Task 25** | Settings screen screenshot | 2 pts | Pending | `evidence/evidence-settings-screen.png` |
 | **Task 26** | Notification implementation source code | 4 pts | In Progress | `lib/features/notifications/services/notification_service.dart` |
 | **Task 27** | Notification configuration screenshot | 2 pts | Pending | `evidence/evidence-notification-configure.png` |

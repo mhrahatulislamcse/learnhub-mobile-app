@@ -27,6 +27,7 @@ class FavoritesProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   int get count => _favorites.length;
+  int get favoritesCount => _favorites.length;
 
   /// Checks if a book is currently in favorites
   bool isFavorite(String bookId) => _favoriteIds.contains(bookId);

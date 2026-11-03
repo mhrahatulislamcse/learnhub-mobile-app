@@ -4,6 +4,7 @@ import '../core/constants/app_constants.dart';
 import '../features/auth/providers/auth_provider.dart';
 import '../features/books/providers/books_provider.dart';
 import '../features/favorites/providers/favorites_provider.dart';
+import '../features/settings/providers/settings_provider.dart';
 import 'routes.dart';
 import 'theme.dart';
 
@@ -24,14 +25,21 @@ class LearnHubAppRoot extends StatelessWidget {
         ChangeNotifierProvider<FavoritesProvider>(
           create: (_) => FavoritesProvider(),
         ),
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (_) => SettingsProvider(),
+        ),
       ],
-      child: MaterialApp.router(
-        title: AppConstants.appName,
-        debugShowCheckedModeBanner: false,
-        theme: AppThemeData.lightTheme,
-        darkTheme: AppThemeData.darkTheme,
-        themeMode: ThemeMode.system,
-        routerConfig: AppRoutes.router,
+      child: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, _) {
+          return MaterialApp.router(
+            title: AppConstants.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppThemeData.lightTheme,
+            darkTheme: AppThemeData.darkTheme,
+            themeMode: settingsProvider.themeMode,
+            routerConfig: AppRoutes.router,
+          );
+        },
       ),
     );
   }

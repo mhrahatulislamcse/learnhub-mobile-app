@@ -19,6 +19,9 @@ class UserModel {
     this.preferences = const {},
   });
 
+  /// User role (e.g. 'student', 'instructor')
+  String get role => preferences['role'] as String? ?? 'student';
+
   /// Factory constructor to build a [UserModel] from Firebase User + Firestore document
   factory UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? {};

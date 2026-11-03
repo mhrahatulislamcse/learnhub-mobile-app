@@ -7,6 +7,7 @@ import '../../../core/widgets/app_error_widget.dart';
 import '../../../core/widgets/loading_view.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../books/providers/books_provider.dart';
+import '../../settings/widgets/settings_drawer.dart';
 import '../widgets/book_card.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/search_bar_widget.dart';
@@ -44,7 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final booksProvider = context.watch<BooksProvider>();
 
     return Scaffold(
+      drawer: const SettingsDrawer(),
       appBar: AppBar(
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu_rounded),
+            tooltip: 'Open Settings Menu',
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
