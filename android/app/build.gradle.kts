@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.rahatul.learnhub"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
