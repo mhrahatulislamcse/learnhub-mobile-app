@@ -12,9 +12,9 @@
 | **Task 8** | Login source code | 4 pts | **Completed** | [`lib/features/auth/screens/login_screen.dart`](file:///F:/LearnHub/lib/features/auth/screens/login_screen.dart) |
 | **Task 9** | Login screen screenshot | 5 pts | Pending | `evidence/login_screen_evidence.png` |
 | **Task 10** | Login error screenshot | 2 pts | Pending | `evidence/login_error.png` |
-| **Task 11** | Home screen source code | 4 pts | In Progress | `lib/features/home/screens/home_screen.dart` |
+| **Task 11** | Home screen source code | 4 pts | **Completed** | [`lib/features/home/screens/home_screen.dart`](file:///F:/LearnHub/lib/features/home/screens/home_screen.dart) |
 | **Task 12** | Home screen screenshot | 4 pts | Pending | `evidence/home-screen-evidence.png` |
-| **Task 13** | Detail screen source code | 4 pts | In Progress | `lib/features/details/screens/book_detail_screen.dart` |
+| **Task 13** | Detail screen source code | 4 pts | **Completed** | [`lib/features/details/screens/book_detail_screen.dart`](file:///F:/LearnHub/lib/features/details/screens/book_detail_screen.dart) |
 | **Task 14** | Detail navigation screenshot | 2 pts | Pending | `evidence/evidence-detail-navigation.png` |
 | **Task 15** | Detail screen screenshot | 2 pts | Pending | `evidence/evidence-detail-screen.png` |
 | **Task 16** | Local storage source code | 4 pts | In Progress | `lib/services/storage_service.dart` |
