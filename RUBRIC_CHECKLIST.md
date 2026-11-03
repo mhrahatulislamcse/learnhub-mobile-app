@@ -2,14 +2,14 @@
 
 | Task # | Task Description | Points | Status | Evidence / Source Reference |
 | :---: | :--- | :---: | :---: | :--- |
-| **Task 1** | Public GitHub repository link | 2 pts | In Progress | `https://github.com/mhrahatulislam/learnhub-mobile-app` |
-| **Task 2** | Nine user stories Markdown file | 9 pts | **Completed** | `USER_STORIES.md` |
+| **Task 1** | Public GitHub repository link | 2 pts | **Completed** | [mhrahatulislamcse/learnhub-mobile-app](https://github.com/mhrahatulislamcse/learnhub-mobile-app) |
+| **Task 2** | Nine user stories Markdown file | 9 pts | **Completed** | [`USER_STORIES.md`](file:///F:/LearnHub/USER_STORIES.md) |
 | **Task 3** | Figma five-screen screenshot | 5 pts | Pending | `evidence/figma-evidence1.png` |
 | **Task 4** | Figma four-screen screenshot | 4 pts | Pending | `evidence/figma-evidence2.png` |
-| **Task 5** | Signup source code | 4 pts | **Completed** | `lib/features/auth/screens/register_screen.dart` |
+| **Task 5** | Signup source code | 4 pts | **Completed** | [`lib/features/auth/screens/register_screen.dart`](file:///F:/LearnHub/lib/features/auth/screens/register_screen.dart) |
 | **Task 6** | Signup screen screenshot | 6 pts | Pending | `evidence/signup_screen_evidence.png` |
 | **Task 7** | Signup error screenshot | 2 pts | Pending | `evidence/signup_error.png` |
-| **Task 8** | Login source code | 4 pts | **Completed** | `lib/features/auth/screens/login_screen.dart` |
+| **Task 8** | Login source code | 4 pts | **Completed** | [`lib/features/auth/screens/login_screen.dart`](file:///F:/LearnHub/lib/features/auth/screens/login_screen.dart) |
 | **Task 9** | Login screen screenshot | 5 pts | Pending | `evidence/login_screen_evidence.png` |
 | **Task 10** | Login error screenshot | 2 pts | Pending | `evidence/login_error.png` |
 | **Task 11** | Home screen source code | 4 pts | In Progress | `lib/features/home/screens/home_screen.dart` |
@@ -31,4 +31,3 @@
 | **Task 27** | Notification configuration screenshot | 2 pts | Pending | `evidence/evidence-notification-configure.png` |
 | **Task 28** | Successful notification alert screenshot | 4 pts | Pending | `evidence/evidence-notification-alert.png` |
 | **TOTAL** | **Comprehensive Full Application Delivery** | **100 pts** | | |
-
