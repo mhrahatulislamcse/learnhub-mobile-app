@@ -8,9 +8,7 @@ import '../providers/notification_provider.dart';
 import '../services/notification_service.dart';
 
 /// Task 26: Notification Implementation Source Code (4 points)
-/// Screen 10: Notification Configuration & Alert Screen
-/// Demonstrates notification channel configuration, permission handling,
-/// instant test notifications, and scheduled daily study reminders.
+/// Replicates Figma Screen 09 (Notifications / Stay on track) with channel inspector and daily scheduler
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -47,326 +45,414 @@ class _NotificationScreenState extends State<NotificationScreen> {
   String _formatTimeOfDay(TimeOfDay time) {
     final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    return DateFormat('hh:mm a').format(dt);
+    return DateFormat('h:mm a').format(dt);
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final notifProvider = context.watch<NotificationProvider>();
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: const Text('Notification Center'),
+        backgroundColor: AppColors.lightBackground,
+        elevation: 0,
+        title: const Text(
+          'Notification Center',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primary),
           onPressed: () => context.pop(),
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         children: [
-          // 1. Permission Status Banner
-          _buildPermissionBanner(context, notifProvider),
-          const SizedBox(height: 18),
-
-          // 2. Channel Configuration Card (Task 27)
-          _buildSectionHeader(context, 'Notification Channel Settings', Icons.tune_rounded),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppColors.lightBorder),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          'ANDROID CHANNEL',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.check_circle_rounded, size: 14, color: AppColors.success),
-                            SizedBox(width: 4),
-                            Text(
-                              'Active',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.success),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(height: 20),
-                  _buildConfigRow('Channel ID', NotificationService.channelIdReminders),
-                  const SizedBox(height: 8),
-                  _buildConfigRow('Channel Name', NotificationService.channelNameReminders),
-                  const SizedBox(height: 8),
-                  _buildConfigRow('Importance', 'High (Heads-up alert & sound)'),
-                  const SizedBox(height: 8),
-                  _buildConfigRow('Vibration & Audio', 'Enabled'),
-                  const SizedBox(height: 8),
-                  _buildConfigRow('Schedule Mode', 'ExactAlarm (exactAllowWhileIdle)'),
-                ],
-              ),
+          // Figma 09 Headline: Stay on track
+          const Text(
+            'Stay on track',
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w800,
+              color: AppColors.primary,
+              letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 20),
-
-          // 3. Instant Test Notification Card (Task 28)
-          _buildSectionHeader(context, 'Trigger Test Notification', Icons.notifications_active_rounded),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppColors.lightBorder),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Send an immediate notification to test display title, body, and notification shade appearance.',
-                    style: theme.textTheme.bodySmall?.copyWith(color: AppColors.lightTextSecondary),
-                  ),
-                  const SizedBox(height: 14),
-                  TextField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      labelText: 'Notification Title',
-                      prefixIcon: const Icon(Icons.title_rounded, color: AppColors.primary),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _bodyController,
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      labelText: 'Notification Body',
-                      prefixIcon: const Icon(Icons.message_rounded, color: AppColors.primary),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  CustomButton(
-                    text: _isTriggering ? 'Triggering...' : 'Trigger Test Notification',
-                    icon: const Icon(Icons.send_rounded, color: Colors.white),
-                    isLoading: _isTriggering,
-                    onPressed: () async {
-                      setState(() => _isTriggering = true);
-                      final ok = await notifProvider.sendTestNotification(
-                        title: _titleController.text.trim(),
-                        body: _bodyController.text.trim(),
-                      );
-                      setState(() => _isTriggering = false);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              ok
-                                  ? 'Alert dispatched: "${_titleController.text}"'
-                                  : 'Failed to trigger notification',
-                            ),
-                            backgroundColor: ok ? AppColors.success : AppColors.error,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+          const SizedBox(height: 4),
+          const Text(
+            'Small reminders help build big habits.',
+            style: TextStyle(
+              fontSize: 12,
+              color: AppColors.lightTextSecondary,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
-          // 4. Scheduled Study Reminders Card (Task 27)
-          _buildSectionHeader(context, 'Scheduled Study Reminders', Icons.alarm_rounded),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: const BorderSide(color: AppColors.lightBorder),
+          // Figma 09: Daily Learning Reminder Highlight Card (Background #EAF1FC, rx 15)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.pillBlue,
+              borderRadius: BorderRadius.circular(15),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: const Text('Daily Study Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: const Text('Recurring daily notification to reinforce reading habits'),
-                    value: notifProvider.dailyReminderEnabled,
-                    onChanged: (val) async {
-                      if (val) {
-                        await notifProvider.scheduleDailyReminder(
-                          hour: _selectedTime.hour,
-                          minute: _selectedTime.minute,
-                        );
-                      } else {
-                        await notifProvider.cancelDailyReminder();
-                      }
-                    },
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
                   ),
-                  const Divider(height: 16),
-                  Row(
+                  child: const Center(
+                    child: Icon(Icons.notifications_active_rounded, color: AppColors.secondary, size: 22),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.schedule_rounded, color: AppColors.primary),
-                      const SizedBox(width: 8),
                       Text(
-                        'Scheduled Time: ${_formatTimeOfDay(_selectedTime)}',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        'Daily Study Reminder',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
                       ),
-                      const Spacer(),
-                      OutlinedButton.icon(
-                        icon: const Icon(Icons.edit_calendar_rounded, size: 16),
-                        label: const Text('Change'),
-                        onPressed: () => _pickTime(context),
+                      SizedBox(height: 2),
+                      Text(
+                        'Daily learning reminder • A little progress every day.',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.lightTextSecondary,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  CustomButton(
-                    text: 'Save Scheduled Reminder',
-                    icon: const Icon(Icons.alarm_on_rounded, color: Colors.white),
-                    isOutlined: true,
-                    onPressed: () async {
-                      final ok = await notifProvider.scheduleDailyReminder(
+                ),
+                Switch(
+                  value: notifProvider.dailyReminderEnabled,
+                  activeColor: AppColors.secondary,
+                  onChanged: (val) async {
+                    if (val) {
+                      await notifProvider.scheduleDailyReminder(
                         hour: _selectedTime.hour,
                         minute: _selectedTime.minute,
                       );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              ok
-                                  ? 'Study reminder scheduled daily at ${_formatTimeOfDay(_selectedTime)}'
-                                  : 'Failed to schedule reminder',
-                            ),
-                            backgroundColor: ok ? AppColors.success : AppColors.error,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+                    } else {
+                      await notifProvider.cancelDailyReminder();
+                    }
+                  },
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),
 
-          // 5. Notification History & Activity
+          // Figma 09: Scheduled Study Reminders Card
+          const Text(
+            'Scheduled Study Reminders',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.lightBorder),
+            ),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Every day',
+                      style: TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _formatTimeOfDay(_selectedTime),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => _pickTime(context),
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Save scheduled reminder button for test & schedule confirmation
+          CustomButton(
+            text: 'Save Scheduled Reminder',
+            height: 48,
+            backgroundColor: AppColors.secondary,
+            textColor: Colors.white,
+            icon: const Icon(Icons.alarm_on_rounded, color: Colors.white, size: 18),
+            onPressed: () async {
+              await notifProvider.scheduleDailyReminder(
+                hour: _selectedTime.hour,
+                minute: _selectedTime.minute,
+              );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Study reminder scheduled for ${_formatTimeOfDay(_selectedTime)}',
+                    ),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 24),
+
+          // Figma 09: Recent Activity Section
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildSectionHeader(context, 'Notification Activity', Icons.history_rounded),
-              if (notifProvider.recentAlerts.isNotEmpty)
-                TextButton(
-                  onPressed: () => notifProvider.clearAlertHistory(),
-                  child: const Text('Clear Log'),
+              const Text(
+                'Recent activity',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
                 ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('All notifications marked as read')),
+                  );
+                },
+                child: const Text(
+                  'Mark all read',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.secondary,
+                  ),
+                ),
+              ),
             ],
           ),
-          if (notifProvider.recentAlerts.isEmpty)
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: AppColors.lightBorder),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(24.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Icon(Icons.notifications_none_rounded, size: 40, color: AppColors.lightTextSecondary),
-                      SizedBox(height: 8),
-                      Text(
-                        'No notification history yet.',
-                        style: TextStyle(color: AppColors.lightTextSecondary),
+          const SizedBox(height: 12),
+
+          _buildActivityCard(
+            title: 'Your daily goal is waiting',
+            body: 'Take 10 minutes to explore a new book.',
+            timestamp: 'Today · 9:00 AM',
+            isUnread: true,
+          ),
+          const SizedBox(height: 10),
+          _buildActivityCard(
+            title: 'A book for your interests',
+            body: 'New titles in Design are ready to explore.',
+            timestamp: 'Yesterday',
+            isUnread: true,
+          ),
+          const SizedBox(height: 10),
+          _buildActivityCard(
+            title: 'Welcome to LearnHub',
+            body: 'Your learning journey starts now.',
+            timestamp: 'Monday',
+            isUnread: true,
+          ),
+          const SizedBox(height: 24),
+
+          // Trigger Test Notification Section (Task 28)
+          const Text(
+            'Trigger Test Notification',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(color: AppColors.lightBorder),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Notification Title',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _bodyController,
+                  maxLines: 2,
+                  decoration: const InputDecoration(
+                    labelText: 'Notification Body',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                CustomButton(
+                  text: _isTriggering ? 'Triggering...' : 'Trigger Test Notification',
+                  height: 48,
+                  backgroundColor: AppColors.secondary,
+                  textColor: Colors.white,
+                  icon: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
+                  isLoading: _isTriggering,
+                  onPressed: () async {
+                    setState(() => _isTriggering = true);
+                    final ok = await notifProvider.sendTestNotification(
+                      title: _titleController.text.trim(),
+                      body: _bodyController.text.trim(),
+                    );
+                    setState(() => _isTriggering = false);
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            ok
+                                ? 'Alert dispatched: "${_titleController.text}"'
+                                : 'Failed to trigger notification',
+                          ),
+                          backgroundColor: ok ? AppColors.success : AppColors.error,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Channel Configuration Card (Task 27)
+          const Text(
+            'Notification Channel Settings',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(color: AppColors.lightBorder),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.pillBlue,
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          else
-            ...notifProvider.recentAlerts.map((alert) {
-              final timestamp = alert['timestamp'] as DateTime;
-              return Card(
-                margin: const EdgeInsets.only(bottom: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                    child: Icon(
-                      alert['type'] == 'Daily Schedule'
-                          ? Icons.alarm_rounded
-                          : Icons.notifications_active_rounded,
-                      color: AppColors.primary,
-                      size: 20,
+                      child: const Text(
+                        'ANDROID CHANNEL',
+                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                      ),
                     ),
-                  ),
-                  title: Text(
-                    alert['title'] as String,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                  ),
-                  subtitle: Text(
-                    alert['body'] as String,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  trailing: Text(
-                    DateFormat('HH:mm').format(timestamp),
-                    style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
-                  ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'Notifications Allowed',
+                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.success),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            }),
-          const SizedBox(height: 30),
+                const SizedBox(height: 12),
+                _buildChannelRow('Channel ID', NotificationService.channelIdReminders),
+                const SizedBox(height: 6),
+                _buildChannelRow('Channel Name', NotificationService.channelNameReminders),
+                const SizedBox(height: 6),
+                _buildChannelRow('Importance', 'High (Heads-up alert & sound)'),
+                const SizedBox(height: 6),
+                _buildChannelRow('Vibration & Audio', 'Enabled'),
+                const SizedBox(height: 6),
+                _buildChannelRow('Study Reminders', 'Daily Study Reminder Active'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
-  Widget _buildPermissionBanner(BuildContext context, NotificationProvider notifProvider) {
-    final isGranted = notifProvider.isPermissionGranted;
-
+  Widget _buildActivityCard({
+    required String title,
+    required String body,
+    required String timestamp,
+    bool isUnread = false,
+  }) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: (isGranted ? AppColors.success : AppColors.warning).withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: (isGranted ? AppColors.success : AppColors.warning).withValues(alpha: 0.3),
-        ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(13),
+        border: Border.all(color: AppColors.lightBorder),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            isGranted ? Icons.check_circle_rounded : Icons.warning_amber_rounded,
-            color: isGranted ? AppColors.success : AppColors.warning,
-            size: 28,
+          Container(
+            width: 34,
+            height: 34,
+            decoration: const BoxDecoration(
+              color: AppColors.pillBlue,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Icon(Icons.notifications_rounded, color: AppColors.secondary, size: 18),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -374,75 +460,60 @@ class _NotificationScreenState extends State<NotificationScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isGranted ? 'Notifications Allowed' : 'Permission Required',
-                  style: TextStyle(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: isGranted ? AppColors.success : AppColors.warning,
-                    fontSize: 13,
+                    color: AppColors.primary,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
-                  isGranted
-                      ? 'System notification delivery is active and ready.'
-                      : 'Please grant notification access to receive alerts.',
-                  style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
+                  body,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.lightTextSecondary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  timestamp,
+                  style: const TextStyle(
+                    fontSize: 9,
+                    color: AppColors.lightTextSecondary,
+                  ),
                 ),
               ],
             ),
           ),
-          if (!isGranted)
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.warning,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          if (isUnread)
+            Container(
+              width: 8,
+              height: 8,
+              margin: const EdgeInsets.only(top: 4),
+              decoration: const BoxDecoration(
+                color: AppColors.secondary,
+                shape: BoxShape.circle,
               ),
-              onPressed: () => notifProvider.requestPermissions(),
-              child: const Text('Allow', style: TextStyle(fontSize: 12)),
             ),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: AppColors.primary),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildConfigRow(String label, String value) {
+  Widget _buildChannelRow(String label, String value) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          width: 120,
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary, fontWeight: FontWeight.w600),
-          ),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 11, color: AppColors.lightTextSecondary),
         ),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
         ),
       ],
     );
   }
 }
-

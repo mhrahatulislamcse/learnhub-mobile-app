@@ -7,6 +7,7 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../providers/auth_provider.dart';
 
 /// Task 5: Signup Screen Source Code
+/// Faithfully styled after Figma Screen 02 (Registration)
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -31,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleRegister() async {
-    // Clear any previous error banner
     context.read<AuthProvider>().clearError();
 
     if (_formKey.currentState?.validate() ?? false) {
@@ -50,37 +50,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primary),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Create Account'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  'Join LearnHub',
-                  style: theme.textTheme.displaySmall,
+                // Figma 02: Circular Book Logo
+                Center(
+                  child: Container(
+                    width: 76,
+                    height: 76,
+                    decoration: const BoxDecoration(
+                      color: AppColors.pillBlue,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.auto_stories_rounded,
+                        size: 36,
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Discover thousands of learning resources and academic books',
-                  style: theme.textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // Meaningful Error Banner (for Task 7: signup error display)
+                // Figma 02: Headline & Subtitle
+                const Center(
+                  child: Text(
+                    'Join LearnHub',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.primary,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Center(
+                  child: Text(
+                    'Start building a better learning habit.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.lightTextSecondary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Error Banner (for Task 7: signup error display)
                 if (authProvider.errorMessage != null) ...[
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -91,8 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.error_outline, color: AppColors.error, size: 24),
-                        const SizedBox(width: 12),
+                        const Icon(Icons.error_outline, color: AppColors.error, size: 22),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             authProvider.errorMessage!,
@@ -110,39 +144,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                 ],
 
                 // Username Field
                 CustomTextField(
                   label: 'Username',
-                  hint: 'e.g. rahatul_learner',
+                  hint: 'Your name',
                   controller: _usernameController,
-                  prefixIcon: const Icon(Icons.person_outline),
+                  prefixIcon: const Icon(Icons.person_outline, color: AppColors.lightTextSecondary),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Please enter a username.';
                     }
                     if (value.trim().length < 3) {
-                      return 'Username must be at least 3 characters long.';
-                    }
-                    final usernameRegex = RegExp(r'^[a-zA-Z0-9_]+$');
-                    if (!usernameRegex.hasMatch(value.trim())) {
-                      return 'Username may only contain letters, numbers, and underscores.';
+                      return 'Username must be at least 3 characters.';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
                 // Email Field
                 CustomTextField(
                   label: 'Email Address',
-                  hint: 'name@example.com',
+                  hint: 'you@example.com',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.lightTextSecondary),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -150,20 +180,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                     if (!emailRegex.hasMatch(value.trim())) {
-                      return 'Please enter a valid email format (e.g. name@example.com).';
+                      return 'Please enter a valid email address.';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
                 // Password Field
                 CustomTextField(
                   label: 'Password',
-                  hint: 'At least 6 characters',
+                  hint: 'Create a password',
                   controller: _passwordController,
                   isPassword: true,
-                  prefixIcon: const Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline, color: AppColors.lightTextSecondary),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -175,15 +205,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
                 // Confirm Password Field
                 CustomTextField(
                   label: 'Confirm Password',
-                  hint: 'Re-enter your password',
+                  hint: 'Repeat your password',
                   controller: _confirmPasswordController,
                   isPassword: true,
-                  prefixIcon: const Icon(Icons.lock_reset_outlined),
+                  prefixIcon: const Icon(Icons.lock_reset_outlined, color: AppColors.lightTextSecondary),
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _handleRegister(),
                   validator: (value) {
@@ -196,36 +226,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 6),
 
-                // Submit Button
+                // Figma helper text
+                const Text(
+                  'Use at least 8 characters with a number.',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.lightTextSecondary,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Submit Button (Figma rx 14, height 54, #3978D5)
                 CustomButton(
                   text: 'Create Account',
+                  height: 54,
+                  backgroundColor: AppColors.secondary,
+                  textColor: Colors.white,
                   isLoading: authProvider.isLoading,
                   onPressed: _handleRegister,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // Already have account prompt
+                // Terms Notice
+                const Center(
+                  child: Text(
+                    'By continuing, you agree to our Terms & Privacy Policy.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppColors.lightTextSecondary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Login Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Already registered?',
-                      style: theme.textTheme.bodyMedium,
+                    const Text(
+                      'Already have an account? ',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.lightTextSecondary,
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () => context.pop(),
-                      child: Text(
-                        'Sign In',
+                    GestureDetector(
+                      onTap: () => context.pop(),
+                      child: const Text(
+                        'Log in',
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          fontSize: 13,
+                          color: AppColors.secondary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -234,4 +295,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-

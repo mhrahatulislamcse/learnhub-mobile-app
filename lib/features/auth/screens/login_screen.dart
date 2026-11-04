@@ -8,6 +8,7 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../providers/auth_provider.dart';
 
 /// Task 8: Login Screen Source Code
+/// Faithfully styled after Figma Screen 01 (393 x 852 px mobile design)
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -28,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
-    // Clear any previous error
     context.read<AuthProvider>().clearError();
 
     if (_formKey.currentState?.validate() ?? false) {
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const Text(
               'Enter your email address to receive password reset instructions.',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, color: AppColors.lightTextSecondary),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -105,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -114,52 +115,71 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // App Branding
+                  // Figma 01: Top Circular Book Logo
                   Center(
                     child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppColors.primary, AppColors.secondary],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                      width: 86,
+                      height: 86,
+                      decoration: const BoxDecoration(
+                        color: AppColors.pillBlue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.auto_stories_rounded,
+                          size: 40,
+                          color: AppColors.secondary,
                         ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.25),
-                            blurRadius: 16,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
                       ),
-                      child: const Icon(
-                        Icons.auto_stories_rounded,
-                        size: 42,
-                        color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Figma App Name & Tagline
+                  Center(
+                    child: Text(
+                      AppConstants.appName,
+                      style: const TextStyle(
+                        fontSize: 29,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primary,
+                        letterSpacing: -0.5,
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Center(
+                    child: Text(
+                      'Your next chapter starts here.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.lightTextSecondary,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Figma Subheadings: Welcome back
+                  const Text(
+                    'Welcome back',
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF17243A),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Sign in to continue learning',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.lightTextSecondary,
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  // Heading
-                  Center(
-                    child: Text(
-                      'Welcome to ${AppConstants.appName}',
-                      style: theme.textTheme.displayMedium,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Center(
-                    child: Text(
-                      'Sign in to explore books & track favorites',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Meaningful Error Banner (for Task 10: login error display)
+                  // Error Banner (Task 10: login error display)
                   if (authProvider.errorMessage != null) ...[
                     Container(
                       padding: const EdgeInsets.all(12),
@@ -170,8 +190,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline, color: AppColors.error, size: 24),
-                          const SizedBox(width: 12),
+                          const Icon(Icons.error_outline, color: AppColors.error, size: 22),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               authProvider.errorMessage!,
@@ -189,16 +209,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                   ],
 
-                  // Email Field
+                  // Email Field (Figma rx 12, stroke #E7ECF3)
                   CustomTextField(
                     label: 'Email Address',
-                    hint: 'name@example.com',
+                    hint: 'you@example.com',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const Icon(Icons.email_outlined),
+                    prefixIcon: const Icon(Icons.email_outlined, color: AppColors.lightTextSecondary),
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -211,15 +231,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
 
                   // Password Field
                   CustomTextField(
                     label: 'Password',
-                    hint: '••••••••',
+                    hint: 'Enter your password',
                     controller: _passwordController,
                     isPassword: true,
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    prefixIcon: const Icon(Icons.lock_outline, color: AppColors.lightTextSecondary),
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _handleLogin(),
                     validator: (value) {
@@ -232,54 +252,138 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
 
-                  // Forgot Password Link
+                  // Forgot Password Link (Figma #3978D5, right-aligned)
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: _showForgotPasswordDialog,
-                      child: Text(
+                      child: const Text(
                         'Forgot Password?',
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: AppColors.secondary,
                           fontWeight: FontWeight.w600,
+                          fontSize: 12,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
-                  // Submit Button
+                  // Submit Button (Figma rx 14, height 54, #3978D5)
                   CustomButton(
                     text: 'Sign In',
+                    height: 54,
+                    backgroundColor: AppColors.secondary,
+                    textColor: Colors.white,
                     isLoading: authProvider.isLoading,
                     onPressed: _handleLogin,
                   ),
                   const SizedBox(height: 16),
 
-                  // Continue as Guest Option
+                  // Divider (────────  OR CONTINUE WITH  ────────)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(child: Divider(color: AppColors.lightBorder)),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            'OR CONTINUE WITH',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.lightTextSecondary,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider(color: AppColors.lightBorder)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Continue with Google Button (Figma 01: white card, G logo, rx 13)
+                  InkWell(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Google Sign-In integration ready.')),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(13),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(13),
+                        border: Border.all(color: AppColors.lightBorder),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: const BoxDecoration(
+                              color: AppColors.pillBlue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'G',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Continue with Google',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF17243A),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Explore as Guest Button
                   CustomButton(
                     text: 'Explore as Guest',
+                    height: 50,
                     isOutlined: true,
                     onPressed: () => context.go('/home'),
                   ),
                   const SizedBox(height: 24),
 
-                  // Sign Up Navigation
+                  // Sign Up Navigation Link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Don't have an account?",
-                        style: theme.textTheme.bodyMedium,
+                      const Text(
+                        'New to LearnHub? ',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.lightTextSecondary,
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () => context.push('/register'),
-                        child: Text(
+                      GestureDetector(
+                        onTap: () => context.push('/register'),
+                        child: const Text(
                           'Register Here',
                           style: TextStyle(
-                            color: theme.colorScheme.primary,
+                            fontSize: 13,
+                            color: AppColors.secondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -295,4 +399,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

@@ -108,5 +108,8 @@ class SettingsProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  /// Convenience clear cache method
+  Future<bool> clearCache([FavoritesProvider? favoritesProvider]) => clearFavoritesCache(favoritesProvider);
 }
 
