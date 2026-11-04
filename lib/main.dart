@@ -9,6 +9,8 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/books/providers/books_provider.dart';
 import 'features/favorites/providers/favorites_provider.dart';
+import 'features/notifications/providers/notification_provider.dart';
+import 'features/settings/providers/settings_provider.dart';
 import 'injection_container.dart' as di;
 import 'services/firebase_service.dart';
 
@@ -40,17 +42,27 @@ class LearnHubMain extends StatelessWidget {
         ChangeNotifierProvider<FavoritesProvider>(
           create: (_) => FavoritesProvider(),
         ),
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (_) => SettingsProvider(),
+        ),
+        ChangeNotifierProvider<NotificationProvider>(
+          create: (_) => NotificationProvider(),
+        ),
         BlocProvider<AuthBloc>(
           create: (_) => di.sl<AuthBloc>(),
         ),
       ],
-      child: MaterialApp.router(
-        title: AppConstants.appName,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        routerConfig: AppRouter.router,
+      child: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, _) {
+          return MaterialApp.router(
+            title: AppConstants.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: settingsProvider.themeMode,
+            routerConfig: AppRouter.router,
+          );
+        },
       ),
     );
   }
