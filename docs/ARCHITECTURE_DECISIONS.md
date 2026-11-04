@@ -49,3 +49,4 @@ Rather than forcing a single paradigm across disparate problem spaces, LearnHub 
 - **Separation of Concerns**: Critical authentication flows cannot inadvertently mutate UI states.
 - **Testability**: `AuthBloc` is tested with isolated event-state streams, while providers are tested with targeted unit assertions.
 - **Maintainability**: Developers immediately know where to place logic based on whether it is enterprise authentication (BLoC) or feature/view state (Provider).
+

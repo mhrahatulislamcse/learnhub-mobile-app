@@ -44,9 +44,9 @@ class DefaultFirebaseOptions {
     apiKey: _envApiKey.isNotEmpty ? _envApiKey : 'AIzaSyC2dF91kLM7823vPqRtSuVwXyZ01234567',
     appId: _envAppId.isNotEmpty ? _envAppId : '1:104829104829:web:a1b2c3d4e5f6g7h8i9j0k1',
     messagingSenderId: _envMessagingSenderId.isNotEmpty ? _envMessagingSenderId : '104829104829',
-    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-official',
-    authDomain: _envAuthDomain.isNotEmpty ? _envAuthDomain : 'learnhub-official.firebaseapp.com',
-    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-official.appspot.com',
+    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-bdb3d',
+    authDomain: _envAuthDomain.isNotEmpty ? _envAuthDomain : 'learnhub-bdb3d.firebaseapp.com',
+    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-bdb3d.firebasestorage.app',
   );
 
   /// Official Android configuration with environment fallback
@@ -54,8 +54,8 @@ class DefaultFirebaseOptions {
     apiKey: _envApiKey.isNotEmpty ? _envApiKey : 'AIzaSyC2dF91kLM7823vPqRtSuVwXyZ01234567',
     appId: _envAppId.isNotEmpty ? _envAppId : '1:104829104829:android:a1b2c3d4e5f6g7h8i9j0k1',
     messagingSenderId: _envMessagingSenderId.isNotEmpty ? _envMessagingSenderId : '104829104829',
-    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-official',
-    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-official.appspot.com',
+    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-bdb3d',
+    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-bdb3d.firebasestorage.app',
   );
 
   /// Official iOS configuration with environment fallback
@@ -63,8 +63,8 @@ class DefaultFirebaseOptions {
     apiKey: _envApiKey.isNotEmpty ? _envApiKey : 'AIzaSyC2dF91kLM7823vPqRtSuVwXyZ01234567',
     appId: _envAppId.isNotEmpty ? _envAppId : '1:104829104829:ios:a1b2c3d4e5f6g7h8i9j0k1',
     messagingSenderId: _envMessagingSenderId.isNotEmpty ? _envMessagingSenderId : '104829104829',
-    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-official',
-    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-official.appspot.com',
+    projectId: _envProjectId.isNotEmpty ? _envProjectId : 'learnhub-bdb3d',
+    storageBucket: _envStorageBucket.isNotEmpty ? _envStorageBucket : 'learnhub-bdb3d.firebasestorage.app',
     iosBundleId: 'com.rahatul.learnhub',
   );
 
