@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "104829104829",
+    "project_number": "702297358230",
     "project_id": "learnhub-bdb3d",
     "storage_bucket": "learnhub-bdb3d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104829104829:android:a1b2c3d4e5f6g7h8i9j0k1",
+        "mobilesdk_app_id": "1:702297358230:android:5ed74806b146e8ab01e7b7",
         "android_client_info": {
           "package_name": "com.rahatul.learnhub"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "104829104829-androidclientid.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rahatul.learnhub",
-            "certificate_hash": "28e21958bcfd7d5e49ad456e792c90c74fb86ef7"
-          }
-        },
-        {
-          "client_id": "104829104829-webclientid.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC2dF91kLM7823vPqRtSuVwXyZ01234567"
+          "current_key": "AIzaSyBtnf3gaUTorsJMFiNd-fUbOEMsgUhPVg4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "104829104829-webclientid.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
