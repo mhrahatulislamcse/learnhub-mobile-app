@@ -91,6 +91,19 @@ lib/
 
 ---
 
+## Figma UI Design Assets & Evidence
+
+The project includes both high-resolution rendered evidence boards for grading and editable vector SVG screens:
+
+- **Evidence Board 1 (Task 3)**: [`evidence/figma-evidence1.png`](evidence/figma-evidence1.png) — 5 core screens (Login, Register, Home, Details, Favorites/Profile).
+- **Evidence Board 2 (Task 4)**: [`evidence/figma-evidence2.png`](evidence/figma-evidence2.png) — 4 integration & settings screens (REST API, Settings Menu, Settings Screen, Notifications).
+- **Editable Vector Assets (`figma/`)**: [`figma/`](figma/)
+  - 9 individual screen SVGs (393 × 852 px): [`01_login.svg`](figma/01_login.svg), [`02_registration.svg`](figma/02_registration.svg), [`03_home.svg`](figma/03_home.svg), [`04_book_detail.svg`](figma/04_book_detail.svg), [`05_favorites_profile.svg`](figma/05_favorites_profile.svg), [`06_external_api.svg`](figma/06_external_api.svg), [`07_settings_menu.svg`](figma/07_settings_menu.svg), [`08_settings.svg`](figma/08_settings.svg), [`09_notifications.svg`](figma/09_notifications.svg).
+  - 2 multi-screen presentation board SVGs: [`figma-evidence1-board.svg`](figma/figma-evidence1-board.svg) and [`figma-evidence2-board.svg`](figma/figma-evidence2-board.svg).
+  - [Figma Import Guide](figma/README_IMPORT_TO_FIGMA.md).
+
+---
+
 ## 10 Core Application Screens
 
 1. **Login Screen** ([`lib/features/auth/screens/login_screen.dart`](lib/features/auth/screens/login_screen.dart)): Secure Firebase sign-in with live error banners.
